@@ -1,0 +1,3 @@
+[submodule "lib/mdcore-cpp"]
+	path = lib/mdcore-cpp
+	url = https://gitlab.com/MaxDistructo/mdcore-cpp.git
