@@ -7,4 +7,6 @@ set(HEADER_ONLY_SOURCES lib/mdcore-cpp/lib/catch.hpp lib/mdcore-cpp/lib/json.hpp
 #target_include_directories(omega PUBLIC ${PROJECT_SOURCE_DIR}/lib/opus/include
 add_executable(omega ${omega_SRC} ${HEADER_ONLY_SOURCES})
 add_subdirectory(lib/mdcore-cpp)
-target_link_libraries(omega mdcore)
+find_package( Threads )
+find_package(OpenSSL REQUIRED)
+target_link_libraries(omega mdcore ${CMAKE_THREAD_LIBS_INIT} OpenSSL::SSL)

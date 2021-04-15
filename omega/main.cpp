@@ -1,4 +1,4 @@
-#include "mdcore/logger.h"
+#include "main.h"
 
 int main()
 {
