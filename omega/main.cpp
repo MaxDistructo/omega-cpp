@@ -1,5 +1,6 @@
 #include "main.h"
 #include "commands/commands.h"
+#include "commands/PlayerFun.h"
 
 int main()
 {
@@ -9,11 +10,13 @@ int main()
     //Instantiate the commands
     PingCommand ping;
     EchoCommand echo;
+    SlapCommand slap;
     
     //Create the list of commands
     std::vector<mdcore::Command*> commands = {};
 	commands.push_back(*ping);
     commands.push_back(*echo);
+    commands.push_back(*slap);
 
     //Create the command listener
     mdcore::CommandListener c_listener(commands, prefix);
