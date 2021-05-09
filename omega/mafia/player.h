@@ -7,6 +7,7 @@
 #include <map>
 #include <vector>
 #include "json.hpp"
+#include "../utils.h"
 
 class Player
 {
@@ -138,13 +139,9 @@ class Player
         }
         void removeTrait(Trait t)
         {
-            for(std::vector<Trait>::iterator iter; iter < traits.end(); iter++)
-            {
-                if(*iter == t)
-                {
-                    traits.erase(iter);
-                    return;
-                }
+            std::vector<Trait>::iterator iter = getIterLocation(traits, t);
+            if(iter != traits.end()){
+                traits.erase(iter);
             }
         }
         bool hasTrait(Trait t)

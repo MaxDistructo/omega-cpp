@@ -7,6 +7,7 @@
 #include "sleepy_discord/sleepy_discord.h"
 #include <map>
 #include <string>
+#include "../utils.h"
 
 using namespace std;
 
@@ -21,12 +22,5 @@ bool setPlayerRole(SleepyDiscord::Snowflake<SleepyDiscord::User> ID, std::string
 std::string getInvestResults(Role* r);
 template<class T>
 int getRoleIndex(T r){
-    for(size_t i = 0; i < roles.size(); i++)
-    {
-        if(*roles[i] == r)
-        {
-            return i;
-        }
-    }
-    return -1;
+    return getIndex(roles, r);
 };
