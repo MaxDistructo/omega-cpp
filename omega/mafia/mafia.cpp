@@ -42,12 +42,12 @@ vector<Role*> roles = {
         new (nothrow) Jester()
     };
 
-bool playerJoin(SleepyDiscord::Snowflake<SleepyDiscord::User> ID)
+bool playerJoin(SleepyDiscord::Snowflake<SleepyDiscord::User> ID, SleepyDiscord::DiscordClient* c)
 {
     if(!checkForPlayer(ID)){
         Player* newPlayer = nullptr;
 
-        newPlayer = new (nothrow) Player(ID);
+        newPlayer = new (nothrow) Player(ID, c);
         if(newPlayer == nullptr)
         {
             logger.error("Unable to allocate memory for new player!");
@@ -72,6 +72,7 @@ bool playerRemove(SleepyDiscord::Snowflake<SleepyDiscord::User> ID)
         if(player->getID() == ID)
         {
             players.erase(iter);
+            delete player;
             return true;
         }
     }
@@ -118,4 +119,8 @@ bool setPlayerRole(SleepyDiscord::Snowflake<SleepyDiscord::User> ID, std::string
         }
     }
     return false;
+}
+std::string getInvestResults(Role* r)
+{
+    return "";
 }

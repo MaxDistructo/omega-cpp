@@ -11,11 +11,12 @@
 class Player
 {
     public:
-        Player(SleepyDiscord::Snowflake<SleepyDiscord::User> id)
+        Player(SleepyDiscord::Snowflake<SleepyDiscord::User> id, SleepyDiscord::DiscordClient* clientin)
         {
-            id = ID;
+            ID = id;
+            client = clientin;
         }
-        ~Player();
+        ~Player(){};
         SleepyDiscord::Snowflake<SleepyDiscord::User> getID()
         {
             return ID;
@@ -31,6 +32,10 @@ class Player
         {
             return modifiers;
         }
+        const int getModifier(std::string key)
+        {
+            return modifiers[key];
+        }
         const std::map<std::string, int> getEffectiveModifiers()
         {
             std::map<std::string, int> tmp;
@@ -38,7 +43,7 @@ class Player
             tmp.insert(tmp_mods.begin(), tmp_mods.end());
             return tmp;
         }
-        const Role* getRole()
+        Role* getRole()
         {
             return role;
         }
@@ -114,6 +119,46 @@ class Player
             j["firstRole"] = firstRole;
             return j;
         }
+        bool operator==(Player p)
+        {
+            return ID == p.getID();
+        }
+        void kill(Role* r)
+        {
+            alive = false;
+            client->sendMessage(client->createDirectMessageChannel(ID).cast(), "You were killed by a " + r->getName());
+        }
+        void sendMessage(std::string message)
+        {
+            client->sendMessage(client->createDirectMessageChannel(ID).cast(), message);
+        }
+        void addTrait(Trait t)
+        {
+            traits.push_back(t);
+        }
+        void removeTrait(Trait t)
+        {
+            for(std::vector<Trait>::iterator iter; iter < traits.end(); iter++)
+            {
+                if(*iter == t)
+                {
+                    traits.erase(iter);
+                    return;
+                }
+            }
+        }
+        bool hasTrait(Trait t)
+        {
+            return std::count(traits.begin(), traits.end(), t);
+        }
+        bool isAlive()
+        {
+            return alive;
+        }
+        SleepyDiscord::User getUser()
+        {
+            return client->getUser(ID).cast();
+        }
     private:
         Player();
         SleepyDiscord::Snowflake<SleepyDiscord::User> ID;
@@ -122,4 +167,6 @@ class Player
         std::map<std::string, int> modifiers = {};
         std::map<std::string, int> tmp_mods = {};
         bool firstRole = true;
+        bool alive = true;
+        SleepyDiscord::DiscordClient* client;
 };

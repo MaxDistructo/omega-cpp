@@ -38,27 +38,13 @@ class Role
         {
             return abilityModifiers;
         }
-        bool operator==(std::string& s)
+        template<class T>
+        bool operator==(T& s)
         {
             return name == s;
         }
-        bool operator!=(std::string& s)
-        {
-            return name != s;
-        }
-        bool operator==(char* s)
-        {
-            return name == s;
-        }
-        bool operator!=(char* s)
-        {
-            return name != s;
-        }
-        bool operator==(const char* s)
-        {
-            return name == s;
-        }
-        bool operator!=(const char* s)
+        template<class T>
+        bool operator!=(T& s)
         {
             return name != s;
         }

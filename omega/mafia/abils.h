@@ -29,5 +29,6 @@ enum Abilities
     DISGUISE,
     ONLY_SELF,
     CONVERT,
-    REMEMBER
+    REMEMBER,
+    NULL_ABIL
 };
