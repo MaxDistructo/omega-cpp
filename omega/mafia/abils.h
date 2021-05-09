@@ -24,5 +24,10 @@ enum Abilities
     HYPNO, //Hypnotist
     PIRATE,
     INFECT, // Plaguebearer
-    REVEAL
+    REVEAL,
+    STAKE,
+    DISGUISE,
+    ONLY_SELF,
+    CONVERT,
+    REMEMBER
 };

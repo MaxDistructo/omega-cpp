@@ -9,7 +9,9 @@ enum Trait
 
     //Night Abils
     DEAD_TALK,
+    ANON_DEAD_TALK,
     VAMP_TALK,
+    VAMP_READ,
     MAF_TALK,
 
     //Settable Traits
@@ -22,5 +24,9 @@ enum Trait
     BLOCKED,
     INFECTED,
     CANNOT_HEAL,
-    CANNOT_WHISPER
+    CANNOT_WHISPER,
+    CAN_PROMOTE,
+    INNOCENT_EVIL,
+    KILL_BLOCKERS,
+    MUST_KILL
 };

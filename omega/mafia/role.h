@@ -34,6 +34,42 @@ class Role
                 return -1;
             }
         }
+        const std::map<std::string, int> getModifiers()
+        {
+            return abilityModifiers;
+        }
+        bool operator==(std::string& s)
+        {
+            return name == s;
+        }
+        bool operator!=(std::string& s)
+        {
+            return name != s;
+        }
+        bool operator==(char* s)
+        {
+            return name == s;
+        }
+        bool operator!=(char* s)
+        {
+            return name != s;
+        }
+        bool operator==(const char* s)
+        {
+            return name == s;
+        }
+        bool operator!=(const char* s)
+        {
+            return name != s;
+        }
+        bool operator==(Role r)
+        {
+            return *this == r.name;
+        }
+        bool operator!=(Role r)
+        {
+            return *this != r.name;
+        }
     protected:
         void setName(std::string n)
         {
@@ -51,6 +87,7 @@ class Role
         {
             abilityModifiers[key] = value;
         };
+
     private:
         std::vector<Trait> traits = {};
         std::vector<Abilities> abilities = {};
