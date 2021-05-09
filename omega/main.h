@@ -15,7 +15,6 @@
 #include "mdcore/command_listener.h"
 #include "mdcore/command.h"
 #include "sleepy_discord/sleepy_discord.h"
-#include "mdcore/config.h"
 #include "json.hpp"
 #include "emoji.h"
 

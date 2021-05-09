@@ -5,13 +5,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "wincons.h"
 
 class Role
 {
     public:
-        Role();
-        ~Role();
-
+        Role(){};
+        ~Role(){};
         std::string getName()
         {
             return name;
@@ -87,10 +87,14 @@ class Role
         {
             abilityModifiers[key] = value;
         };
-
+        void setWinCondition(WinCondition w)
+        {
+            wincon = w;
+        };
     private:
         std::vector<Trait> traits = {};
         std::vector<Abilities> abilities = {};
         std::string name = "";
         std::map<std::string, int> abilityModifiers = {};
+        WinCondition wincon = WinCondition::WITH_LIKE;
 };
