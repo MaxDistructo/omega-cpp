@@ -28,5 +28,6 @@ enum Trait
     CAN_PROMOTE,
     INNOCENT_EVIL,
     KILL_BLOCKERS,
-    MUST_KILL
+    MUST_KILL,
+    REVEALED
 };

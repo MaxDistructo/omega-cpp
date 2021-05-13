@@ -41,6 +41,10 @@ vector<Role*> roles = {
         new (nothrow) Executioner(),
         new (nothrow) Jester()
     };
+vector<string> hypno_strings
+{
+
+};
 
 bool playerJoin(SleepyDiscord::Snowflake<SleepyDiscord::User> ID, SleepyDiscord::DiscordClient* c)
 {
@@ -105,21 +109,7 @@ Player* getPlayer(SleepyDiscord::Snowflake<SleepyDiscord::User> ID)
     return nullptr;
 }
 
-bool setPlayerRole(SleepyDiscord::Snowflake<SleepyDiscord::User> ID, std::string r)
-{
-    if(checkForPlayer(ID)){
-        auto player = getPlayer(ID);
-        for(auto role : roles)
-        {
-            if(role->getName() == r)
-            {
-                player->setRole(role);
-                return true;
-            }
-        }
-    }
-    return false;
-}
+
 std::string getInvestResults(Role* r)
 {
     return "";

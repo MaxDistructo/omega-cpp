@@ -38,6 +38,10 @@ class Role
         {
             return abilityModifiers;
         }
+        const WinCondition getWinCondition()
+        {
+            return wincon;
+        };
         template<class T>
         bool operator==(T& s)
         {

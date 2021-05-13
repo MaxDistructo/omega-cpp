@@ -310,7 +310,104 @@ void runAbil(Action action)
             action.user->sendMessage("Your target is a " + target->getRole()->getName());
         }
     }
+    if(action.ability == Abilities::WATCH)
+    {
+        for(auto target : action.targets)
+        {
+            action.user->sendMessage("Your target was visited by " + toString(getVisitors(target)));
+        }
+    }
+    if(action.ability == Abilities::SHERIFF)
+    {
+        for(auto target : action.targets)
+        {
+            if(target->hasTrait(Trait::FRAMED) || target->isEvil())
+            {
+                action.user->sendMessage("Your target is suspicious!");
+            }
+            else
+            {
+                action.user->sendMessage("Your target is innocent.");
+            }
+        }
+    }
+    if(action.ability == Abilities::SEANCE)
+    {
+        //Set Game flag for Medium to have a private chat with a player
+    }
+    if(action.ability == Abilities::HYPNO)
+    {
+        for(auto target : action.targets)
+        {
+            target->sendMessage(hypno_strings[action.user->getModifier("hypno")]);
+        }
+    }
+    if(action.ability == Abilities::PIRATE)
+    {
+        if(action.user->getRole()->getName() == "pirate")
+        {
+            for(auto target : action.targets)
+            {
+                target->sendMessage("ARRRR!!! Ye have been visited by a Pirate! Please chose an option to respond.");
+                //Insert listener message here for the responce, and enqueue it into the action list.
+                if(target->hasTrait(Trait::BLOCK_IMMUNE))
+                {
+                    target->addTrait(Trait::BLOCKED);
+                }
+            }
+        }
+        else
+        {
 
+        }
+    }
+
+    if(action.ability == Abilities::REVEAL)
+    {
+        action.user->addTrait(Trait::REVEALED);
+    }
+
+    if(action.ability == Abilities::STAKE)
+    {
+        for(auto target : action.targets)
+        {
+            if(target->getRole()->getName() == "vampire")
+            {
+                useAbility(action.user, {target}, Abilities::ATTACK);
+            }
+        }
+    }
+
+    if(action.ability == Abilities::DISGUISE)
+    {
+        //No clue how to implement, ignoring for now
+        for(auto target : action.targets)
+        {
+        }
+    }
+
+    if(action.ability == Abilities::CONVERT)
+    {
+        for(auto target : action.targets)
+        {
+            if(target->isEvil())
+            {
+                useAbility(action.user, {target}, Abilities::ATTACK);
+            }
+            else
+            {
+                target->setRole(roles[getRoleIndex("vampire")]);
+            }
+        }
+    }
+
+    if(action.ability == Abilities::REMEMBER)
+    {
+        for(auto target : action.targets)
+        {
+            action.user->setRole(target->getRole());
+        }
+    }
 }
 
 std::vector<Player*> getVisitors(Player* player)

@@ -8,6 +8,7 @@
 #include <vector>
 #include "json.hpp"
 #include "../utils.h"
+#include "wincons.h"
 
 class Player
 {
@@ -124,6 +125,26 @@ class Player
         {
             return ID == p.getID();
         }
+        friend std::string operator+(Player* p, std::string& s)
+        {
+            s + p->client->getUser(p->ID).cast().username;
+            return s;
+        }
+        friend std::string operator+=(Player* p, std::string& s)
+        {
+            s + p;
+            return s;
+        }
+        friend std::string operator+(std::string& s, Player* p)
+        {
+            s + p->client->getUser(p->ID).cast().username;
+            return s;
+        }
+        friend std::string operator+=(std::string& s, Player* p)
+        {
+            s + p;
+            return s;
+        }
         void kill(Role* r)
         {
             alive = false;
@@ -155,6 +176,16 @@ class Player
         SleepyDiscord::User getUser()
         {
             return client->getUser(ID).cast();
+        }
+        bool isEvil()
+        {
+            if(role->getWinCondition() == WinCondition::COVEN || role->getWinCondition() == WinCondition::MAFIA || role->getWinCondition() == WinCondition::WITH_LIKE)
+            {
+                if(!hasTrait(Trait::INNOCENT_EVIL)){
+                    return true;
+                }
+            }
+            return false;
         }
     private:
         Player();
