@@ -11,3 +11,4 @@ void useNightAbility(Player* player, std::vector<Player*> target);
 void useDayAbility(Player* player, std::vector<Player*> target);
 std::vector<Player*> getVisitors(Player* player);
 void runAbil(Action action);
+void cleanupAllAbils();

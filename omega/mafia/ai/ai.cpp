@@ -429,3 +429,84 @@ std::vector<Player*> getVisitors(Player* player)
         return visitors[player];
     }
 }
+
+void cleanupAllAbils()
+{
+    //DO NOT DEREFERENCE ANYTHING IN THIS VECTOR!
+    std::vector<Player*> deleted_ptrs;
+
+    //Loop over all actions and check if each player ptr hasn't been deleted yet and delete
+    //the pointer if so.
+    for(Action action : actions)
+    {
+        if(!std::count(deleted_ptrs.begin(), deleted_ptrs.end(), action.user))
+        {
+            deleted_ptrs.push_back(action.user);
+            delete action.user;
+        }
+        for(auto target : action.targets)
+        {
+            if(!std::count(deleted_ptrs.begin(), deleted_ptrs.end(), target))
+            {
+                deleted_ptrs.push_back(target);
+                delete target;
+            }
+        }
+    }
+}
+
+//TODO: Reduce memory usage here as we are duplicating Ability objects.
+void runAllAbilities()
+{
+    //Sort the abilities into their tier order
+    vector<vector<Ability>> abilityTiers = {{},{},{},{},{},{},{},{},{},{}};
+    for(auto abil : actions)
+    {
+        if(abil.ability == Abilities::TRANSPORT)
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        //Veteran has higher priority over ww's kill visitors. 
+        else if(abil.ability == Abilities::KILL_VISITORS && abil.user->getRole() == "veteran")
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        //Uh oh, vigilante is killing themselves.
+        else if(abil.ability == Abilities::ATTACK && abil.user->getRole() == "vigilante" && abil.user == abil.targets[0])
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        else if(abil.ability == Abilities::ATTACK && abil.user->getRole() == "jester")
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        else if(abil.ability == Abilties::SEANCE)
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        else if(abil.ability == Abilities::ATTACK && abil.user->getRole() == "trapper")
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        else if(abil.ability == Abilities::USE_OTHER && (abil.user->getRole() == "retributionist" || abil.user->getRole() == "necromancer"))
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        else if(abil.ability == Abilities::KILL_VISITOR && abil.user->getRole() == "ambusher")
+        {
+            abilityTiers[0].push_back(abil);
+        }
+        else if(abil.ability == Abilities::PIRATE)
+        {
+            abilityTiers[0].push_back(abil);
+        }
+
+        //Most other roleblockers run before this so we have to specify now.
+        else if(abil.ability == Abilities::BLOCK || (abil.user->getRole() == "escort" || abil.user->getRole() == "consort"))
+        {
+            abilityTiers[1].push_back(abil);
+        }
+        
+    }
+    //Run each tier in the appropriate order.
+}
