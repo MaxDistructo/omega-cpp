@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include "wincons.h"
+#include <cstring>
 
 class Role
 {
@@ -59,6 +60,14 @@ class Role
         bool operator!=(Role r)
         {
             return *this != r.name;
+        }
+        bool operator==(const char* s)
+        {
+            return strcmp(name.c_str(), s) == 0;
+        }
+        bool operator!=(const char* s)
+        {
+            return strcmp(name.c_str(), s) != 0;
         }
     protected:
         void setName(std::string n)

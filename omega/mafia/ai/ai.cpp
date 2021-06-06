@@ -3,6 +3,7 @@
 #include <time.h>
 #include "../../utils.h"
 #include "../mafia.h"
+#include "action.h"
 
 std::vector<Action> actions = {};
 
@@ -459,7 +460,7 @@ void cleanupAllAbils()
 void runAllAbilities()
 {
     //Sort the abilities into their tier order
-    vector<vector<Ability>> abilityTiers = {{},{},{},{},{},{},{},{},{},{}};
+    vector<vector<Action>> abilityTiers = {{},{},{},{},{},{},{},{},{},{}};
     for(auto abil : actions)
     {
         if(abil.ability == Abilities::TRANSPORT)
@@ -467,32 +468,32 @@ void runAllAbilities()
             abilityTiers[0].push_back(abil);
         }
         //Veteran has higher priority over ww's kill visitors. 
-        else if(abil.ability == Abilities::KILL_VISITORS && abil.user->getRole() == "veteran")
+        else if(abil.ability == Abilities::KILL_VISITORS && *abil.user->getRole() == "veteran")
         {
             abilityTiers[0].push_back(abil);
         }
         //Uh oh, vigilante is killing themselves.
-        else if(abil.ability == Abilities::ATTACK && abil.user->getRole() == "vigilante" && abil.user == abil.targets[0])
+        else if(abil.ability == Abilities::ATTACK && *abil.user->getRole() == "vigilante" && abil.user == abil.targets[0])
         {
             abilityTiers[0].push_back(abil);
         }
-        else if(abil.ability == Abilities::ATTACK && abil.user->getRole() == "jester")
+        else if(abil.ability == Abilities::ATTACK && *abil.user->getRole() == "jester")
         {
             abilityTiers[0].push_back(abil);
         }
-        else if(abil.ability == Abilties::SEANCE)
+        else if(abil.ability == Abilities::SEANCE)
         {
             abilityTiers[0].push_back(abil);
         }
-        else if(abil.ability == Abilities::ATTACK && abil.user->getRole() == "trapper")
+        else if(abil.ability == Abilities::ATTACK && *abil.user->getRole() == "trapper")
         {
             abilityTiers[0].push_back(abil);
         }
-        else if(abil.ability == Abilities::USE_OTHER && (abil.user->getRole() == "retributionist" || abil.user->getRole() == "necromancer"))
+        else if(abil.ability == Abilities::USE_OTHER && (*abil.user->getRole() == "retributionist" || *abil.user->getRole() == "necromancer"))
         {
             abilityTiers[0].push_back(abil);
         }
-        else if(abil.ability == Abilities::KILL_VISITOR && abil.user->getRole() == "ambusher")
+        else if(abil.ability == Abilities::KILL_VISITOR && *abil.user->getRole() == "ambusher")
         {
             abilityTiers[0].push_back(abil);
         }
@@ -502,11 +503,18 @@ void runAllAbilities()
         }
 
         //Most other roleblockers run before this so we have to specify now.
-        else if(abil.ability == Abilities::BLOCK || (abil.user->getRole() == "escort" || abil.user->getRole() == "consort"))
+        else if(abil.ability == Abilities::BLOCK && (*abil.user->getRole() == "escort" || *abil.user->getRole() == "consort"))
         {
             abilityTiers[1].push_back(abil);
         }
-        
+        else if(abil.ability == Abilities::USE_OTHER && (*abil.user->getRole() == "witch" || *abil.user->getRole() == "coven_leader"))
+        {
+            abilityTiers[1].push_back(abil);
+        }
+        else if(abil.ability == Abilities::GRANT_DEFENCE && (*abil.user->getRole() == "guardian_angel"))
+        {
+            abilityTiers[1].push_back(abil);
+        }
     }
     //Run each tier in the appropriate order.
 }
