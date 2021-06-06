@@ -4,8 +4,10 @@
 #include "../../utils.h"
 #include "../mafia.h"
 #include "action.h"
+#include <algorithm>
 
 std::vector<Action> actions = {};
+std::vector<Action> ranAbilities = {};
 
 std::vector<Abilities> non_night = 
 {
@@ -48,6 +50,49 @@ void useAbility(Player* player, std::vector<Player*> target, bool day)
 void useAbility(Player* player, std::vector<Player*> targets, Abilities ability)
 {
     actions.push_back({ability, targets, player});
+}
+void useAbility(Player* player, std::vector<Player*> targets, Abilities ability, bool day)
+{
+    if(day)
+    {
+        auto abilities = player->getRole()->getAbilities();
+        //If day abil and abil is not a non_action abil
+            if(std::count(non_night.begin(), non_night.end(), ability) && !std::count(non_action.begin(), non_action.end(), ability))
+            {
+                //If we have the OnlySelf flag
+                if(std::count(abilities.begin(), abilities.end(), Abilities::ONLY_SELF))
+                {
+                    //Verify we are targeting ourself
+                    if(std::count(targets.begin(), targets.end(), player)){
+                        actions.push_back({ability, targets, player});
+                    }
+                }
+                //Otherwise, we don't care if we are targeting someone else, apply the action.
+                else{
+                    actions.push_back({ability, targets, player});
+                }
+            }
+    }
+    else
+    {
+        auto abilities = player->getRole()->getAbilities();
+        //If day abil and abil is not a non_action abil
+            if(!std::count(non_night.begin(), non_night.end(), ability) && !std::count(non_action.begin(), non_action.end(), ability))
+            {
+                //If we have the OnlySelf flag
+                if(std::count(abilities.begin(), abilities.end(), Abilities::ONLY_SELF))
+                {
+                    //Verify we are targeting ourself
+                    if(std::count(targets.begin(), targets.end(), player)){
+                        actions.push_back({ability, targets, player});
+                    }
+                }
+                //Otherwise, we don't care if we are targeting someone else, apply the action.
+                else{
+                    actions.push_back({ability, targets, player});
+                }
+            }
+    }
 }
 //Specific implementation for night actions
 void useNightAbility(Player* player, std::vector<Player*> target)
@@ -431,31 +476,6 @@ std::vector<Player*> getVisitors(Player* player)
     }
 }
 
-void cleanupAllAbils()
-{
-    //DO NOT DEREFERENCE ANYTHING IN THIS VECTOR!
-    std::vector<Player*> deleted_ptrs;
-
-    //Loop over all actions and check if each player ptr hasn't been deleted yet and delete
-    //the pointer if so.
-    for(Action action : actions)
-    {
-        if(!std::count(deleted_ptrs.begin(), deleted_ptrs.end(), action.user))
-        {
-            deleted_ptrs.push_back(action.user);
-            delete action.user;
-        }
-        for(auto target : action.targets)
-        {
-            if(!std::count(deleted_ptrs.begin(), deleted_ptrs.end(), target))
-            {
-                deleted_ptrs.push_back(target);
-                delete target;
-            }
-        }
-    }
-}
-
 //TODO: Reduce memory usage here as we are duplicating Ability objects.
 void runAllAbilities()
 {
@@ -515,6 +535,110 @@ void runAllAbilities()
         {
             abilityTiers[1].push_back(abil);
         }
+
+        //Tier 3: TPs and Invest result changers
+        else if(abil.ability == Abilities::GRANT_DEFENCE && (*abil.user->getRole() == "bodyguard" || *abil.user->getRole() == "crusader" || *abil.user->getRole() == "doctor"))
+        {
+            abilityTiers[2].push_back(abil);
+        }
+        else if(abil.ability == Abilities::TRACK)
+        {
+            abilityTiers[2].push_back(abil);
+        }
+        //Most RM mafia abilities trip here
+        else if(abil.ability == Abilities::BLACKMAIL || abil.ability == Abilities::FORGE || abil.ability == Abilities::FRAME || abil.ability == Abilities::HYPNO || abil.ability == Abilities::CLEAN)
+        {
+            abilityTiers[2].push_back(abil);
+        }
+        else if(abil.ability == Abilities::DOUSE)
+        {
+            abilityTiers[2].push_back(abil);
+        }
+        else if(abil.ability == Abilities::GRANT_DEFENCE && (*abil.user->getRole() == "survivor"))
+        {
+            abilityTiers[2].push_back(abil);
+        }
+        else if(abil.ability == Abilities::HEX || abil.ability == Abilities::STONE_VISITORS)
+        {
+            abilityTiers[2].push_back(abil);
+        }
+        else if(abil.ability == Abilities::GRANT_DEFENCE && (*abil.user->getRole() == "potion_master"))
+        {
+            abilityTiers[2].push_back(abil);
+        }
+
     }
     //Run each tier in the appropriate order.
+    for(auto abil : abilityTiers[0])
+    {
+        runAbil(abil);
+    }
+    ranAbilities.insert(ranAbilities.end(), abilityTiers[0].begin(), abilityTiers[0].end());
+    for(auto abil : abilityTiers[1])
+    {
+        runAbil(abil);
+    }
+    ranAbilities.insert(ranAbilities.end(), abilityTiers[1].begin(), abilityTiers[1].end());
+    for(auto abil : abilityTiers[2])
+    {
+        runAbil(abil);
+    }
+    ranAbilities.insert(ranAbilities.end(), abilityTiers[2].begin(), abilityTiers[2].end());
+    for(auto abil : abilityTiers[3])
+    {
+        runAbil(abil);
+    }
+    ranAbilities.insert(ranAbilities.end(), abilityTiers[3].begin(), abilityTiers[3].end());
+    for(auto abil : abilityTiers[4])
+    {
+        runAbil(abil);
+    }
+    ranAbilities.insert(ranAbilities.end(), abilityTiers[4].begin(), abilityTiers[4].end());
+    for(auto abil : abilityTiers[5])
+    {
+        runAbil(abil);
+    }
+    ranAbilities.insert(ranAbilities.end(), abilityTiers[5].begin(), abilityTiers[5].end());
+
+    std::vector<Action> toRun;
+    //Find the abilities we haven't ran. This cleans up any actions added by actions
+    //or actions we forgot about.
+
+    //Our action class cannot be sorted by stl so we have to do it by hand which is very inefficient
+    //MAYBE we can fix this later and make action sortable by stl.
+    bool found = false;
+    for(auto abil : actions)
+    {
+        for(auto abil2 : ranAbilities)
+        {
+            if(abil == abil2)
+            {
+                found = true;
+                break; //Say what you want, this is the easiest way to program this.
+            }
+        }
+        if(!found)
+        {
+            toRun.push_back(abil);
+        }
+        found = false;
+    }
+    /* STL SORT
+    std::sort(actions.begin(), actions.end());
+    std::sort(ranAbilities.begin(), ranAbilities.end());
+    std::set_symmetric_difference(actions.begin(), actions.end(),
+                                  ranAbilities.begin(), ranAbilities.end(),
+                                  std::back_inserter(toRun));
+    */
+
+    //Perform the actual cleanup
+    for(auto abil : toRun)
+    {
+        runAbil(abil);
+    }
+
+    //Everything has been ran, clear all the vectors.
+    toRun.clear();
+    ranAbilities.clear();
+    actions.clear();
 }

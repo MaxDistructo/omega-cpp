@@ -316,7 +316,21 @@ class Hypnotist : public Role
             addModifier("promoted_role", Modifier::PROMOTE_MAFIOSO);
             setWinCondition(WinCondition::MAFIA);
         };
-        ~Hypnotist();
+        ~Hypnotist(){};
+};
+
+class Blackmailer : public Role
+{
+    public:
+        Blackmailer()
+        {
+            setName("blackmailer");
+            setAbilities({Abilities::BLACKMAIL});
+            setTraits({Trait::CAN_PROMOTE, Trait::MAF_TALK, Trait::READ_WHISPERS});
+            addModifier("promoted_role", Modifier::PROMOTE_MAFIOSO);
+            setWinCondition(WinCondition::MAFIA);
+        }
+        ~Blackmailer(){};
 };
 
 class SerialKiller : public Role
@@ -331,7 +345,7 @@ class SerialKiller : public Role
             addModifier("defence", 1);
             setWinCondition(WinCondition::WITH_LIKE);
         };
-        ~SerialKiller();
+        ~SerialKiller(){};
 };
 
 class Werewolf : public Role 
@@ -346,7 +360,7 @@ class Werewolf : public Role
             addModifier("defence", 1);
             setWinCondition(WinCondition::WITH_LIKE);
         }
-        ~Werewolf();
+        ~Werewolf(){};
 };
 
 class Arsonist : public Role
@@ -361,7 +375,7 @@ class Arsonist : public Role
             addModifier("defence", 1);
             setWinCondition(WinCondition::WITH_LIKE);
         };
-        ~Arsonist();
+        ~Arsonist(){};
 };
 
 class Vampire : public Role

@@ -30,5 +30,8 @@ enum Abilities
     ONLY_SELF,
     CONVERT,
     REMEMBER,
+    TRACK,
+    BLACKMAIL,
+    HEX,
     NULL_ABIL
 };

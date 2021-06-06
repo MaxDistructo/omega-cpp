@@ -6,6 +6,7 @@ enum Trait
     DEFENCE,
     BLOCK_IMMUNE,
     UNIQUE,
+    READ_WHISPERS, 
 
     //Night Abils
     DEAD_TALK,
