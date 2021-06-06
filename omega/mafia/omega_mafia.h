@@ -1,0 +1,7 @@
+#include "player.h"
+#include "role.h"
+#include "modifiers.h"
+#include "abils.h"
+#include "roles.h"
+#include "traits.h"
+#include "wincons.h"

@@ -1,6 +1,4 @@
 #include "mafia.h"
-#include "roles.h"
-#include "role.h"
 
 using namespace std;
 
@@ -31,6 +29,7 @@ vector<Role*> roles = {
         new (nothrow) Consort(),
         new (nothrow) Ambusher(),
         new (nothrow) Hypnotist(),
+        new (nothrow) Blackmailer(),
         new (nothrow) SerialKiller(),
         new (nothrow) Werewolf(),
         new (nothrow) Arsonist(),

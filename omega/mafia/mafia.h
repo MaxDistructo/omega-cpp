@@ -1,13 +1,12 @@
 #pragma once
 
-#include "role.h"
-#include "player.h"
 #include <vector>
 #include "mdcore/logger.h"
 #include "sleepy_discord/sleepy_discord.h"
 #include <map>
 #include <string>
 #include "../utils.h"
+#include "omega_mafia.h"
 
 using namespace std;
 
