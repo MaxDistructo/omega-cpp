@@ -3,6 +3,7 @@
 
 #include "../main.h"
 #include "sleepy_discord/permissions.h"
+#include "../mafia/command/com.h"
 
 class PingCommand : public mdcore::Command
 {

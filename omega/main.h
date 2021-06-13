@@ -1,5 +1,4 @@
-#ifndef __omega__main_h
-#define __omega__main_h
+#pragma once
 //C/C++ Includes
 #include <iostream>
 #include <iomanip>
@@ -8,16 +7,15 @@
 #include <ostream>
 #include <vector>
 #include <list>
+#include <map>
 
 //Dependency Headers
 #include "mdcore/logger.h"
 #include "mdcore/dispatcher.h"
-#include "mdcore/command_listener.h"
 #include "mdcore/command.h"
+#include "mdcore/command_listener.h"
+#include "mdcore/subcommand_listener.h"
+#include "mdcore/utils.h"
 #include "sleepy_discord/sleepy_discord.h"
 #include "json.hpp"
 #include "emoji.h"
-
-//Local Headers
-#include "config.h"
-#endif

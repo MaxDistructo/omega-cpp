@@ -1,6 +1,7 @@
 #include "main.h"
 #include "commands/commands.h"
 #include "commands/PlayerFun.h"
+#include "config.h"
 
 int main()
 {
