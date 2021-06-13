@@ -6,20 +6,14 @@
 #include "wincons.h"
 #include "../main.h"
 
+#include "../game_base.h"
+
 namespace omega::Mafia{
-    class Player
+    class Player : public GamePlayer
     {
         public:
-            Player(SleepyDiscord::Snowflake<SleepyDiscord::User> id, SleepyDiscord::DiscordClient* clientin)
-            {
-                ID = id;
-                client = clientin;
-            }
+            Player(SleepyDiscord::Snowflake<SleepyDiscord::User> id, SleepyDiscord::DiscordClient* clientin) : GamePlayer(clientin, id){};
             ~Player(){};
-            SleepyDiscord::Snowflake<SleepyDiscord::User> getID()
-            {
-                return ID;
-            }
             const std::vector<Trait> getTraits()
             {
                 std::vector<Trait> actualTraits;
@@ -110,7 +104,7 @@ namespace omega::Mafia{
             nlohmann::json toJson()
             {
                 nlohmann::json j;
-                j["id"] = ID.string();
+                j["id"] = id.string();
                 j["role"] = role->getName();
                 j["traits"] = traits;
                 j["modifiers"] = modifiers;
@@ -118,38 +112,14 @@ namespace omega::Mafia{
                 j["firstRole"] = firstRole;
                 return j;
             }
-            bool operator==(Player p)
-            {
-                return ID == p.getID();
-            }
-            friend std::string operator+(Player* p, std::string& s)
-            {
-                s + p->client->getUser(p->ID).cast().username;
-                return s;
-            }
-            friend std::string operator+=(Player* p, std::string& s)
-            {
-                s + p;
-                return s;
-            }
-            friend std::string operator+(std::string& s, Player* p)
-            {
-                s + p->client->getUser(p->ID).cast().username;
-                return s;
-            }
-            friend std::string operator+=(std::string& s, Player* p)
-            {
-                s + p;
-                return s;
-            }
             void kill(Role* r)
             {
                 alive = false;
-                client->sendMessage(client->createDirectMessageChannel(ID).cast(), "You were killed by a " + r->getName());
+                client->sendMessage(client->createDirectMessageChannel(id).cast(), "You were killed by a " + r->getName());
             }
             void sendMessage(std::string message)
             {
-                client->sendMessage(client->createDirectMessageChannel(ID).cast(), message);
+                client->sendMessage(client->createDirectMessageChannel(id).cast(), message);
             }
             void addTrait(Trait t)
             {
@@ -170,10 +140,6 @@ namespace omega::Mafia{
             {
                 return alive;
             }
-            SleepyDiscord::User getUser()
-            {
-                return client->getUser(ID).cast();
-            }
             bool isEvil()
             {
                 if(role->getWinCondition() == WinCondition::COVEN || role->getWinCondition() == WinCondition::MAFIA || role->getWinCondition() == WinCondition::WITH_LIKE)
@@ -185,14 +151,12 @@ namespace omega::Mafia{
                 return false;
             }
         private:
-            Player();
-            SleepyDiscord::Snowflake<SleepyDiscord::User> ID;
+            Player() : GamePlayer(){};
             Role* role;
             std::vector<Trait> traits = {};
             std::map<std::string, int> modifiers = {};
             std::map<std::string, int> tmp_mods = {};
             bool firstRole = true;
             bool alive = true;
-            SleepyDiscord::DiscordClient* client;
     };
 }
