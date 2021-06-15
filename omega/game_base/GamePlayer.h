@@ -1,5 +1,6 @@
 #pragma once
 #include "sleepy_discord/sleepy_discord.h"
+#include <string>
 
 namespace omega{
     class GamePlayer
@@ -20,6 +21,10 @@ namespace omega{
             {
                 return client->getUser(id).cast();
             }
+            void sendMessage(std::string message)
+            {
+                client->sendMessage(client->createDirectMessageChannel(id).cast(), message);
+            }     
             bool operator==(GamePlayer p)
             {
                 return id == p.getID();
@@ -46,6 +51,7 @@ namespace omega{
             }
         protected:
             SleepyDiscord::DiscordClient* client;
-            SleepyDiscord::Snowflake<SleepyDiscord::User> id;    
+            SleepyDiscord::Snowflake<SleepyDiscord::User> id;
+            SleepyDiscord::Channel channel;
     };
 }

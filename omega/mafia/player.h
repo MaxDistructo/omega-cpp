@@ -117,10 +117,6 @@ namespace omega::Mafia{
                 alive = false;
                 client->sendMessage(client->createDirectMessageChannel(id).cast(), "You were killed by a " + r->getName());
             }
-            void sendMessage(std::string message)
-            {
-                client->sendMessage(client->createDirectMessageChannel(id).cast(), message);
-            }
             void addTrait(Trait t)
             {
                 traits.push_back(t);
