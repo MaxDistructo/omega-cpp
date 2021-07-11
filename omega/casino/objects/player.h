@@ -13,7 +13,8 @@ namespace omega::Casino
             enum Metadata
             {
                 DAILY,
-                DAILY_COOLDOWN
+                DAILY_COOLDOWN,
+                FROZEN
             };
             std::string getMeta(Metadata key)
             {
@@ -23,6 +24,14 @@ namespace omega::Casino
             {
                 metadata[key] = value;
             };
+            bool deleteMeta(Metadata key)
+            {
+                metadata[key] = "";
+            }
+            int getMoney()
+            {
+                return money;
+            }
             void giveMoney(int val)
             {
                 money += val;

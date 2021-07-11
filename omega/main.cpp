@@ -22,6 +22,9 @@ int main()
     //Create the command listener
     mdcore::CommandListener c_listener(commands, prefix);
 	client.registerListener(*c_listener);
+
+    //Game Listener, only runs when we need to listen for a message, from a specific player, in a specific channel, of specific content
+    
 	client.run();
 
     return 0;

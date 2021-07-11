@@ -6,6 +6,7 @@ namespace omega::Casino
     std::vector<ReelItems> v_reel1 = {ReelItems::STAR, ReelItems::HEART, ReelItems::SEVEN, ReelItems::SEVEN, ReelItems::HEART, ReelItems::X, ReelItems::X, ReelItems::X, ReelItems::X, ReelItems::X};
     std::vector<ReelItems> v_reel2 = {ReelItems::STAR, ReelItems::HEART, ReelItems::SEVEN, ReelItems::SEVEN, ReelItems::HEART, ReelItems::HEART, ReelItems::SEVEN, ReelItems::X, ReelItems::SEVEN, ReelItems::HEART};
     std::vector<ReelItems> v_reel3 = {ReelItems::STAR, ReelItems::HEART, ReelItems::SEVEN, ReelItems::X, ReelItems::X, ReelItems::X, ReelItems::X, ReelItems::X, ReelItems::X, ReelItems::X, ReelItems::X};
+    std::string createEmojiString(std::vector<ReelItems> v);
     bool playSlots(Player* player, int bet)
     {
         player->sendMessage("Rolling the slots");
@@ -60,55 +61,7 @@ namespace omega::Casino
         else //LOSER!
         {
             player->sendMessage(emojicpp::EMOJIS[":box:"] + emojicpp::EMOJIS[":box:"] + emojicpp::EMOJIS[":box:"]);
-            std::string builder;
-            if(reel1 == ReelItems::STAR)
-            {
-                builder += emojicpp::EMOJIS[":star:"];
-            }
-            else if(reel1 == ReelItems::HEART)
-            {
-                builder += emojicpp::EMOJIS[":heart:"];
-            }
-            else if(reel1 == ReelItems::SEVEN)
-            {
-                builder += emojicpp::EMOJIS[":keycap_digit_seven:"];
-            }
-            else
-            {
-                builder += emojicpp::EMOJIS[":x:"];
-            }
-            if(reel2 == ReelItems::STAR)
-            {
-                builder += emojicpp::EMOJIS[":star:"];
-            }
-            else if(reel2 == ReelItems::STAR)
-            {
-                builder += emojicpp::EMOJIS[":heart:"];
-            }
-            else if(reel2 == ReelItems::STAR)
-            {
-                builder += emojicpp::EMOJIS[":keycap_digit_seven:"];
-            }
-            else
-            {
-                builder += emojicpp::EMOJIS[":x:"];
-            }
-            if(reel3 == ReelItems::STAR)
-            {
-                builder += emojicpp::EMOJIS[":star:"];
-            }
-            else if(reel3 == ReelItems::HEART)
-            {
-                builder += emojicpp::EMOJIS[":heart:"];
-            }
-            else if(reel3 == ReelItems::SEVEN)
-            {
-                builder += emojicpp::EMOJIS[":keycap_digit_seven:"];
-            }
-            else
-            {
-                builder += emojicpp::EMOJIS[":x:"];
-            }
+            std::string builder = createEmojiString({reel1, reel2, reel3});
             player->sendMessage(builder);
             player->sendMessage(emojicpp::EMOJIS[":box:"] + emojicpp::EMOJIS[":box:"] + emojicpp::EMOJIS[":box:"]);
             player->sendMessage("YOU LOSE");
@@ -116,6 +69,29 @@ namespace omega::Casino
             return true;
         }
         return false;
-
+    }
+    std::string createEmojiString(std::vector<ReelItems> v)
+    {
+        std::string output;
+        for(auto i : v)
+        {
+            if(i == ReelItems::STAR)
+            {
+                output += emojicpp::EMOJIS[":star:"];
+            }
+            else if(i == ReelItems::HEART)
+            {
+                output += emojicpp::EMOJIS[":heart:"];
+            }
+            else if(ReelItems::SEVEN)
+            {
+                output += emojicpp::EMOJIS[":keycap_digit_seven:"];
+            }
+            else
+            {
+                output += emojicpp::EMOJIS[":x:"];
+            }
+        }
+        return output;
     }
 }
