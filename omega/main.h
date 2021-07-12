@@ -10,7 +10,7 @@
 #include <map>
 
 //Dependency Headers
-#include "mdcore/logger.h"
+#include "../lib/mdcore-cpp/lib/mdcore/include/mdcore/logger.h"
 #include "mdcore/dispatcher.h"
 #include "mdcore/command.h"
 #include "mdcore/command_listener.h"

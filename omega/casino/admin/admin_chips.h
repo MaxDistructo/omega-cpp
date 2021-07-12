@@ -12,23 +12,23 @@ namespace omega::Casino{
         CasinoAdminGive();
         ~CasinoAdminGive();
         void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message event, std::vector<std::string> args) override;
-    }
+    };
     class CasinoAdminRemove : public mdcore::Command
     {
         CasinoAdminRemove();
         ~CasinoAdminRemove();
         void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message event, std::vector<std::string> args) override;
-    }
+    };
     class CasinoAdminReset : public mdcore::Command
     {
         CasinoAdminReset();
         ~CasinoAdminReset();
         void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message event, std::vector<std::string> args) override;
-    }
+    };
     class CasinoAdminFreeze : public mdcore::Command
     {
         CasinoAdminFreeze();
         ~CasinoAdminFreeze();
         void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message event, std::vector<std::string> args) override;
-    }
+    };
 }

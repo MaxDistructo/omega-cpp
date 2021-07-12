@@ -24,7 +24,7 @@ namespace omega::Casino
             {
                 metadata[key] = value;
             };
-            bool deleteMeta(Metadata key)
+            void deleteMeta(Metadata key)
             {
                 metadata[key] = "";
             }

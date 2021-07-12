@@ -83,7 +83,7 @@ namespace omega::Casino
             {
                 output += emojicpp::EMOJIS[":heart:"];
             }
-            else if(ReelItems::SEVEN)
+            else if(i == ReelItems::SEVEN)
             {
                 output += emojicpp::EMOJIS[":keycap_digit_seven:"];
             }
