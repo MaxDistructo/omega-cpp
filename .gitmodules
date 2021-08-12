@@ -1,6 +1,3 @@
-[submodule "lib/mdcore-cpp"]
-	path = lib/mdcore-cpp
-	url = https://gitlab.com/MaxDistructo/mdcore-cpp.git
 [submodule "lib/opus"]
 	path = lib/opus
 	url = https://github.com/xiph/opus
