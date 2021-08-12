@@ -1,17 +1,22 @@
+#pragma once
 #include "../player.h"
 #include "../ai/ai.h"
 #include "mdcore/command.h"
 #include "mdcore/subcommand_listener.h"
+#include "../manager/player_memory_manager.h"
 #include <string>
 
 static bool day = false;
 static int day_num = 0;
 static bool allow_join = true;
-static std::map<std::string, omega::Mafia::Player*> players;
+static omega::Mafia::PlayerMemoryManager* manager = nullptr;
 
 omega::Mafia::Player* getPlayer(std::string arg)
 {
-    //TODO: FINISH ME
+    //FIXME: Upgrade code to get IDs from more inputs.
+    //RN we just do a lazy convert from string to the long long int that a discord snowflake is
+    int64_t id = stoi(arg);
+    manager->getOrCreate(id);
 }
 
 class MafiaCommand : public mdcore::Command
@@ -24,6 +29,11 @@ class MafiaCommand : public mdcore::Command
     ~MafiaCommand(){};
     void execute(SleepyDiscord::DiscordClient *client, SleepyDiscord::Message event, std::vector<std::string> args) override
     {
+        //Init the manager with the client* we get from the Dispatcher
+        if(manager == nullptr)
+        {
+            manager = new (std::nothrow) omega::Mafia::PlayerMemoryManager(client);
+        }
         listener.onMessage(client, event, args);
     };
     private:
@@ -41,7 +51,7 @@ class MafiaJoin : mdcore::Command
     ~MafiaJoin(){};
     void execute(SleepyDiscord::DiscordClient *client, SleepyDiscord::Message event, std::vector<std::string> args) override
     {
-        players[event.author.ID] = new (std::nothrow) omega::Mafia::Player(event.author.ID, client);
+        manager->create(event.author.ID);
     };
 };
 namespace omega::Mafia::Ai{
@@ -59,40 +69,40 @@ namespace omega::Mafia::Ai{
                 SleepyDiscord::User u = event.author;
                 if(args.size() == 3){
                     std::vector<Player*> targets = { getPlayer(args[2]) };
-                    useAbility(players[event.author.ID], targets, day);
+                    useAbility(manager->get(event.author.ID), targets, day);
                 }
                 else if(args.size() == 4)
                 {
                     std::vector<Player*> targets = { getPlayer(args[2]), getPlayer(args[3]) };
-                    useAbility(players[event.author.ID], targets, day);
+                    useAbility(manager->get(event.author.ID), targets, day);
                 }
                 else
                 {
                     std::vector<Player*> targets = { getPlayer(args[2]) };
-                    if(*players[event.author.ID]->getRole() == "potion_master")
+                    if(*manager->get(event.author.ID)->getRole() == "potion_master")
                     {
                         if(args[3] == "attack"){
-                            useAbility(players[event.author.ID], targets, Abilities::ATTACK, day);
+                            useAbility(manager->get(event.author.ID), targets, Abilities::ATTACK, day);
                         }
                         else if(args[3] == "heal")
                         {
-                            useAbility(players[event.author.ID], targets, Abilities::GRANT_DEFENCE, day);
+                            useAbility(manager->get(event.author.ID), targets, Abilities::GRANT_DEFENCE, day);
                         }
                         else if(args[3] == "invest" || args[3] == "investigate" || args[3] == "reveal")
                         {
-                            useAbility(players[event.author.ID], targets, Abilities::INVEST_ABSOLUTE, day);
+                            useAbility(manager->get(event.author.ID), targets, Abilities::INVEST_ABSOLUTE, day);
                         }
                     }
-                    else if(*players[event.author.ID]->getRole() == "pirate")
+                    else if(*manager->get(event.author.ID)->getRole() == "pirate")
                     {
                         if(day)
                         {
-                            useAbility(players[event.author.ID], targets, day);
+                            useAbility(manager->get(event.author.ID), targets, day);
                         }
                         else
                         {
                             //TODO: Properly set flag so when the pirate action runs, all the data is avaliable.s
-                            useAbility(players[event.author.ID], targets, day);
+                            useAbility(manager->get(event.author.ID), targets, day);
                         }
                     }
                 }

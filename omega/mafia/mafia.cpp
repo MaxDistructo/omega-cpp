@@ -2,7 +2,6 @@
 
 using namespace std;
 namespace omega::Mafia{
-    vector<Player*> players = {};
     mdcore::Logger logger = mdcore::Logger("Mafia");
     vector<Role*> roles = {
             new (nothrow) Investigator(),
