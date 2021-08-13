@@ -11,12 +11,22 @@ static int day_num = 0;
 static bool allow_join = true;
 static omega::Mafia::PlayerMemoryManager* manager = nullptr;
 
-omega::Mafia::Player* getPlayer(std::string arg)
+omega::Mafia::Player* getPlayer(SleepyDiscord::Message& event, std::string arg)
 {
     //FIXME: Upgrade code to get IDs from more inputs.
     //RN we just do a lazy convert from string to the long long int that a discord snowflake is
+
+    //Format: DiscordName#0000
+    //Start by checking for a #. Basic format check for most people's lazy way of mentioning.
+    if(arg.find("#") != std::string::npos)
+    {
+        //We have a #, Assume the basic format and check with the Message's Server to get the Member
+        SleepyDiscord::ServerMember member = manager->getClient()->getMember(event.serverID, arg.substr(0, arg.find("#"))).cast();
+        return manager->getOrCreate(member.ID);
+    }
+
     int64_t id = stoi(arg);
-    manager->getOrCreate(id);
+    return manager->getOrCreate(id);
 }
 
 class MafiaCommand : public mdcore::Command
@@ -68,17 +78,17 @@ namespace omega::Mafia::Ai{
             {
                 SleepyDiscord::User u = event.author;
                 if(args.size() == 3){
-                    std::vector<Player*> targets = { getPlayer(args[2]) };
+                    std::vector<Player*> targets = { getPlayer(event, args[2]) };
                     useAbility(manager->get(event.author.ID), targets, day);
                 }
                 else if(args.size() == 4)
                 {
-                    std::vector<Player*> targets = { getPlayer(args[2]), getPlayer(args[3]) };
+                    std::vector<Player*> targets = { getPlayer(event, args[2]), getPlayer(event, args[3]) };
                     useAbility(manager->get(event.author.ID), targets, day);
                 }
                 else
                 {
-                    std::vector<Player*> targets = { getPlayer(args[2]) };
+                    std::vector<Player*> targets = { getPlayer(event, args[2]) };
                     if(*manager->get(event.author.ID)->getRole() == "potion_master")
                     {
                         if(args[3] == "attack"){

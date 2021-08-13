@@ -4,8 +4,6 @@
 #include <string>
 #include "sleepy_discord/sleepy_discord.h"
 
-using BackendIterator = typename std::map<SleepyDiscord::Snowflake<SleepyDiscord::User>, omega::Mafia::Player*>::const_iterator;
-
 namespace omega{
 namespace Mafia{
     class PlayerMemoryManager
@@ -23,9 +21,13 @@ namespace Mafia{
                     }
                     backend.clear();
                 };
+                SleepyDiscord::DiscordClient* getClient()
+                {
+                    return client;
+                }
                 omega::Mafia::Player* get(SleepyDiscord::Snowflake<SleepyDiscord::User> id)
                 {
-                    BackendIterator it = backend.find(id);
+                    std::map<int64_t, omega::Mafia::Player*>::iterator it = backend.find(id.number());
                     if(it != backend.end())
                     {
                         return it->second;
@@ -38,7 +40,7 @@ namespace Mafia{
                     omega::Mafia::Player* t = new Player(id, client);
                     if(t != nullptr)
                     {
-                        backend[id] = t;
+                        backend[id.number()] = t;
                         return true;
                     }
                     return false;
@@ -63,11 +65,11 @@ namespace Mafia{
                     if(t != nullptr)
                     {
                         delete t;
-                        backend[id] = nullptr;
+                        backend[id.number()] = nullptr;
                     }
                 };
             private:
-                std::map<SleepyDiscord::Snowflake<SleepyDiscord::User>, Player*> backend;
+                std::map<int64_t, Player*> backend;
                 SleepyDiscord::DiscordClient* client;
         };
 }

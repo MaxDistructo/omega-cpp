@@ -1,4 +1,5 @@
 #include "omega_mafia.h"
+#include "command/com.h"
 
 using namespace std;
 namespace omega::Mafia{
@@ -47,16 +48,7 @@ namespace omega::Mafia{
     bool playerJoin(SleepyDiscord::Snowflake<SleepyDiscord::User> ID, SleepyDiscord::DiscordClient* c)
     {
         if(!checkForPlayer(ID)){
-            Player* newPlayer = nullptr;
-
-            newPlayer = new (nothrow) Player(ID, c);
-            if(newPlayer == nullptr)
-            {
-                logger.error("Unable to allocate memory for new player!");
-                exit(-1);
-            }
-
-            players.push_back(newPlayer);
+            manager->create(ID);
             return true;
         }
         else
@@ -67,46 +59,14 @@ namespace omega::Mafia{
 
     bool playerRemove(SleepyDiscord::Snowflake<SleepyDiscord::User> ID)
     {
-        
-        for(vector<Player*>::iterator iter = players.begin(); iter < players.end(); iter++)
-        {
-            auto* player = players[iter-players.begin()];
-            if(player->getID() == ID)
-            {
-                players.erase(iter);
-                delete player;
-                return true;
-            }
-        }
-        return false;
+        manager->remove(ID);
+        return true;
     }
 
     bool checkForPlayer(SleepyDiscord::Snowflake<SleepyDiscord::User> ID)
     {
-    for(vector<Player*>::iterator iter = players.begin(); iter < players.end(); iter++)
-        {
-            auto* player = players[iter-players.begin()];
-            if(player->getID() == ID)
-            {
-                return true;
-            }
-        }
-        return false;
+        return manager->get(ID) != nullptr;
     }
-
-    Player* getPlayer(SleepyDiscord::Snowflake<SleepyDiscord::User> ID)
-    {
-        for(vector<Player*>::iterator iter = players.begin(); iter < players.end(); iter++)
-        {
-            auto* player = players[iter-players.begin()];
-            if(player->getID() == ID)
-            {
-                return player;
-            }
-        }
-        return nullptr;
-    }
-
 
     std::string getInvestResults(Role* r)
     {
