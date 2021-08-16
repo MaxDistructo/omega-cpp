@@ -1,26 +1,17 @@
 #pragma once
 
-#include "../main.h"
 #include "player.h"
 #include "role.h"
 #include "roles.h"
-#include "command/com.h"
-#include "manager/player_memory_manager.h"
-
-using namespace std;
+#include "data.h"
+#include "sleepy_discord/sleepy_discord.h"
 
 namespace omega::Mafia{
-    extern vector<Role*> roles;
-    extern vector<std::string> hypno_strings;
-
-    bool checkForPlayer(SleepyDiscord::Snowflake<SleepyDiscord::User> ID);
-    bool playerJoin(SleepyDiscord::Snowflake<SleepyDiscord::User> ID);
-    bool playerRemove(SleepyDiscord::Snowflake<SleepyDiscord::User> ID);
     template<class T>
     bool setPlayerRole(SleepyDiscord::Snowflake<SleepyDiscord::User> ID, T r)
     {
-        if(checkForPlayer(ID)){
-            auto player = manager->get(ID);
+        Player* player = manager->get(ID);
+        if(player != nullptr){
             for(auto role : roles)
             {
                 if(role->getName() == r)

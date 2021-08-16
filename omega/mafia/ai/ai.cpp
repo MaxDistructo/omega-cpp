@@ -5,7 +5,10 @@
 #include <time.h>
 //C++ Libs (algo's so big we do NOT import by default)
 #include <algorithm>
-#include "../omega_mafia.h"
+
+//Mafia Code
+#include "../abils.h"
+#include "../mafia.h"
 
 namespace omega::Mafia::Ai{
     std::vector<Action> actions = {};
@@ -482,7 +485,7 @@ namespace omega::Mafia::Ai{
     void runAllAbilities()
     {
         //Sort the abilities into their tier order
-        vector<vector<Action>> abilityTiers = {{},{},{},{},{},{},{},{},{},{}};
+        std::vector<std::vector<Action>> abilityTiers = {{},{},{},{},{},{},{},{},{},{}};
         for(auto abil : actions)
         {
             if(abil.ability == Abilities::TRANSPORT)
