@@ -10,6 +10,15 @@ namespace omega::Mafia{
     {
         public:
             Role(){};
+            //The copy constructor
+            Role(Role& r) 
+            {
+                setName(r.getName());
+                setTraits(r.getTraits());
+                setAbilities(r.getAbilities());
+                setModifiers(r.getModifiers());
+                setWinCondition(r.getWinCondition());
+            };
             ~Role(){};
             std::string getName()
             {
@@ -80,6 +89,10 @@ namespace omega::Mafia{
             {
                 traits = t;
             };
+            void setModifiers(const std::map<std::string, int> m)
+            {
+                abilityModifiers = m;
+            }
             void addModifier(std::string key, int value)
             {
                 abilityModifiers[key] = value;

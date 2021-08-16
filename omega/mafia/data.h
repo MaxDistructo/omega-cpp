@@ -1,16 +1,26 @@
 #pragma once
 
 #include "manager/player_memory_manager.h"
-#include <vector>
 #include "role.h"
 #include "roles.h"
+
+#ifndef USE_MEMORY_MANAGED
+#include <vector>
+using RoleVector = std::vector<omega::Mafia::Role*>;
+#else
+#include "manager/memory_managed_vector.h"
+using RoleVector = MemoryManagedVector<Role*>;
+#endif
 
 namespace omega::Mafia{
     #ifndef PLAYER_MEMORY_MANAGER
     #define PLAYER_MEMORY_MANAGER
     static omega::Mafia::PlayerMemoryManager* manager = nullptr;
     #endif
-    static std::vector<Role*> roles = {
+    //We are not declaring with nothrow. If we don't get the memory, we will crash
+    //This is not a concern in most cases but it is a posibility with unchecked memory allocations
+    //TODO: Move this initialization to a manager
+    static RoleVector roles = {
             new Investigator(),
             new Lookout(),
             new Sheriff(),
