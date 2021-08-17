@@ -4,12 +4,14 @@
 #include "role.h"
 #include "roles.h"
 
+#define USE_MEMORY_MANAGED
+
 #ifndef USE_MEMORY_MANAGED
 #include <vector>
 using RoleVector = std::vector<omega::Mafia::Role*>;
 #else
 #include "manager/memory_managed_vector.h"
-using RoleVector = MemoryManagedVector<Role*>;
+using RoleVector = MemoryManagedVector<omega::Mafia::Role>;
 #endif
 
 namespace omega::Mafia{

@@ -19,6 +19,14 @@ namespace omega::Mafia{
                 setModifiers(r.getModifiers());
                 setWinCondition(r.getWinCondition());
             };
+            Role(Role* r) 
+            {
+                setName(r->getName());
+                setTraits(r->getTraits());
+                setAbilities(r->getAbilities());
+                setModifiers(r->getModifiers());
+                setWinCondition(r->getWinCondition());
+            };
             ~Role(){};
             std::string getName()
             {
