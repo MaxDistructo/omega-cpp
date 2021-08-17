@@ -54,6 +54,13 @@ jobs:
       run: | 
         git submodule init
         git submodule update
+    
+    # mdcore-cpp has submodules in it as well. We need to pull these as well
+    - name: Fix Submodule Submodules
+      working-directory: ./lib/mdcore-cpp
+      run: |
+        git submodule init
+        git submodule update
         
     - name: Download and install dependencies
       run:  |
