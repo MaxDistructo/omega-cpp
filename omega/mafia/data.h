@@ -21,7 +21,6 @@ namespace omega::Mafia{
     #endif
     //We are not declaring with nothrow. If we don't get the memory, we will crash
     //This is not a concern in most cases but it is a posibility with unchecked memory allocations
-    //TODO: Move this initialization to a manager
     static RoleVector roles = {
             new Investigator(),
             new Lookout(),
