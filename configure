@@ -1,0 +1,13 @@
+#!/bin/bash
+rm -rf build
+mkdir build
+cd build
+if ! command -v cmake > /dev/null
+then
+   sudo apt-get install cmake
+fi
+if ! command -v ninja &> /dev/null
+then
+   sudo apt-get install ninja-build
+fi
+cmake .. -GNinja
