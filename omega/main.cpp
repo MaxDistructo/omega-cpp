@@ -3,6 +3,9 @@
 #include "commands/PlayerFun.h"
 #include "config.h"
 #include "events.h"
+#include "resources.h"
+
+EventDispatcher* e_dispatcher = new (std::nothrow) EventDispatcher();
 
 int main()
 {
@@ -24,11 +27,13 @@ int main()
     mdcore::CommandListener c_listener(commands, prefix);
 	client.registerListener(*c_listener);
 
-    //Game Listener, only runs when we need to listen for a message, from a specific player, in a specific channel, of specific content
-    EventDispatcher e_listener;
-    client.registerListener(*e_listener);
+    //Create events system listener. This is exposed through the resources.h header to register new events
+    client.registerListener(e_dispatcher);
 
 	client.run();
+
+    //If we get here, delete the event dispatcher before we leave.
+    delete e_dispatcher;
 
     return 0;
 }

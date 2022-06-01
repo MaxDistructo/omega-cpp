@@ -1,3 +1,4 @@
+#pragma once
 #include "mdcore/listener.h"
 #include "mdcore/logger.h"
 
@@ -9,7 +10,7 @@ class EventListener
             this->channel = channel;
             this->user = user;
         };
-        ~EventListener();
+        virtual ~EventListener(){};
         virtual void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message message);
         SleepyDiscord::Snowflake<SleepyDiscord::Channel> getChannel()
         {
@@ -29,7 +30,14 @@ class EventDispatcher: public mdcore::Listener
 
     public:
         EventDispatcher(){};
-        ~EventDispatcher(){};
+        ~EventDispatcher()
+        {
+            //We took over the memory handing from whoever created this. Delete all EventListeners in queue before we die.
+            for(auto const& [key,val] : listeners)
+            {
+                delete val;
+            }
+        };
         void onMessage(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message message) override
         {
             for(auto const& [key, val] : listeners)
