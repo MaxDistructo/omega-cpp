@@ -2,6 +2,7 @@
 #include "commands/commands.h"
 #include "commands/PlayerFun.h"
 #include "config.h"
+#include "events.h"
 
 int main()
 {
@@ -24,7 +25,9 @@ int main()
 	client.registerListener(*c_listener);
 
     //Game Listener, only runs when we need to listen for a message, from a specific player, in a specific channel, of specific content
-    
+    EventDispatcher e_listener;
+    client.registerListener(*e_listener);
+
 	client.run();
 
     return 0;
