@@ -19,3 +19,4 @@ then
    sudo apt-get install ninja-build
 fi
 cmake .. -GNinja
+echo "Generating Makefile"
