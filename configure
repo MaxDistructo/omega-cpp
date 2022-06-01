@@ -8,7 +8,7 @@ then
 fi
 if ! command -v openssl &> /dev/null
 then
-   sudo apt-get install libssl
+   sudo apt-get install libssl-dev libcurl4-openssl-dev
 fi
 if ! command -v cmake &> /dev/null
 then

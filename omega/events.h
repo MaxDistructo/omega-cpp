@@ -30,7 +30,7 @@ class EventDispatcher: public mdcore::Listener
 
     public:
         EventDispatcher(){};
-        ~EventDispatcher()
+        virtual ~EventDispatcher()
         {
             //We took over the memory handing from whoever created this. Delete all EventListeners in queue before we die.
             for(auto const& [key,val] : listeners)
