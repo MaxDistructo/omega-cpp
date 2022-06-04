@@ -37,7 +37,9 @@ class MemoryManagedVector
             using reference = T*;
             Iterator()
             {
+                #ifndef __clang__
                 m_ptr = get(index);
+                #endif
             }
             Iterator(pointer ptr) : m_ptr(ptr) {};
             private:
@@ -46,35 +48,37 @@ class MemoryManagedVector
                 void increment()
                 {
                     index++;
+                    #ifndef __clang__
                     m_ptr = get(index);
+                    #endif
+                }
+            public:
+                reference operator*() const {return m_ptr; }
+                pointer operator->() { return m_ptr; }
+                Iterator& operator++() 
+                {
+                    increment();
+                    return *this;
+                };
+                Iterator operator++(int) 
+                {
+                    //Store copy of self
+                    Iterator tmp = *this;
+                    //Increment
+                    increment();
+                    //Return the copy
+                    return tmp;
+                };
+
+                friend bool operator== (const Iterator& a, const Iterator& b) 
+                {
+                    return a.m_ptr == b.m_ptr;
                 }
 
-            reference operator*() const {return m_ptr; }
-            pointer operator->() { return m_ptr; }
-            Iterator& operator++() 
-            {
-                increment();
-                return *this;
-            };
-            Iterator operator++(int) 
-            {
-                //Store copy of self
-                Iterator tmp = *this;
-                //Increment
-                increment();
-                //Return the copy
-                return tmp;
-            };
-
-            friend bool operator== (const Iterator& a, const Iterator& b) 
-            {
-                return a.m_ptr == b.m_ptr;
-            }
-
-            friend bool operator!= (const Iterator& a, const Iterator& b)
-            {
-                return a.m_ptr != b.m_ptr;
-            }
+                friend bool operator!= (const Iterator& a, const Iterator& b)
+                {
+                    return a.m_ptr != b.m_ptr;
+                }
         };
         Iterator begin() {return Iterator();};
         Iterator end() {return Iterator(&backend[backend.size() + 1]);};

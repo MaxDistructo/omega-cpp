@@ -1,0 +1,22 @@
+#!/bin/bash
+rm -rf clangbuild
+mkdir clangbuild
+cd clangbuild
+if ! command -v curl &> /dev/null
+then
+   sudo apt-get install curl
+fi
+if ! command -v openssl &> /dev/null
+then
+   sudo apt-get install libssl-dev libcurl4-openssl-dev
+fi
+if ! command -v cmake &> /dev/null
+then
+   sudo apt-get install cmake
+fi
+if ! command -v ninja &> /dev/null
+then
+   sudo apt-get install ninja-build
+fi
+CC=clang CXX=clang++ cmake .. -GNinja
+echo "Generating Makefile"
