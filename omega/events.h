@@ -2,6 +2,10 @@
 #include "mdcore/listener.h"
 #include "mdcore/logger.h"
 
+/**
+ * @brief The event listener object. This is only used by the event dispatcher.
+ * 
+ */
 class EventListener
 {
     public:
@@ -59,6 +63,7 @@ class EventDispatcher: public mdcore::Listener
                 EventListener* val = listeners[matching_key];
                 delete val;
                 listeners[matching_key] = nullptr;
+                matching_key = "";
             }
         }
         /**

@@ -10,7 +10,10 @@ EventDispatcher* e_dispatcher = new (std::nothrow) EventDispatcher();
 int main()
 {
     //Instantiate our client
-    mdcore::Dispatcher client(mdcore::readToken());
+    mdcore::Dispatcher client(mdcore::readToken(), SleepyDiscord::Mode::DEFAULT_THREADS);
+    
+    //Love you discord... But this is annoying
+    client.setIntents(SleepyDiscord::Intent::SERVER_MEMBERS, SleepyDiscord::Intent::SERVER_MESSAGES);
     
     //Instantiate the commands
     PingCommand ping;
