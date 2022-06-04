@@ -65,6 +65,15 @@ class EventDispatcher: public mdcore::Listener
                 listeners[matching_key] = nullptr;
                 matching_key = "";
             }
+            //This allows listeners to queue up new listeners.
+            if(!queue.empty())
+            {
+                for(auto const& [key, val] : queue)
+                {
+                    listeners[key] = val;
+                }
+                queue.clear();
+            }
         }
         /**
          * @brief Register a new listener
@@ -76,6 +85,16 @@ class EventDispatcher: public mdcore::Listener
         void registerListener(std::string name, EventListener* listener)
         {
             listeners[name] = listener;
+        }
+        /**
+         * @brief Threadsafe version of registerListener
+         * 
+         * @param name 
+         * @param listener 
+         */
+        void enqueueListener(std::string name, EventListener* listener)
+        {
+            queue[name] = listener;
         }
         /**
          * @brief Delete a registered EventListener
@@ -90,5 +109,6 @@ class EventDispatcher: public mdcore::Listener
         }
     private:
         std::map<std::string, EventListener*> listeners;
+        std::map<std::string, EventListener*> queue;
         mdcore::Logger logger = mdcore::Logger("EventDispatcher");
 };
