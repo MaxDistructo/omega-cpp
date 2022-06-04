@@ -11,7 +11,7 @@ class EventListener
             this->user = user;
         };
         virtual ~EventListener(){};
-        virtual void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message message);
+        virtual void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message message){};
         SleepyDiscord::Snowflake<SleepyDiscord::Channel> getChannel()
         {
             return this->channel;
@@ -40,14 +40,25 @@ class EventDispatcher: public mdcore::Listener
         };
         void onMessage(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message message) override
         {
+            std::string matching_key = "";
             for(auto const& [key, val] : listeners)
             {
-                if(val->getUser() == message.author.ID && val->getChannel() == message.channelID)
-                {
-                    logger.info("Executing " + key);
-                    val->execute(client, message);
-                    break;
+                if(val != nullptr){
+                    if(val->getUser() == message.author.ID && val->getChannel() == message.channelID)
+                    {
+                        logger.info("Executing " + key);
+                        val->execute(client, message);
+                        //Queue up a delete of the listener after the loop ends.
+                        matching_key = key;
+                        break;
+                    }
                 }
+            }
+            if(matching_key != "")
+            {
+                EventListener* val = listeners[matching_key];
+                delete val;
+                listeners[matching_key] = nullptr;
             }
         }
         /**

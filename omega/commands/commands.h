@@ -51,9 +51,11 @@ class EchoCommand : public mdcore::Command
 class EchoEventListener: public EventListener
 {
     public:
-        EchoEventListener(SleepyDiscord::Message message): EventListener(message.channelID, message.author.ID){};
-        ~EchoEventListener(){};
-        void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message message)
+        EchoEventListener(SleepyDiscord::Message message): EventListener(message.channelID, message.author.ID)
+        {};
+        ~EchoEventListener() override
+        {};
+        void execute(SleepyDiscord::DiscordClient* client, SleepyDiscord::Message message) override
         {
             message.reply(client, message.content);
         };
